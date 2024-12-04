@@ -2,6 +2,7 @@ package com.ciberaccion.jobportal.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
+import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -13,11 +14,12 @@ import java.util.Date;
 @Table(name = "users")
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 @ToString
 public class Users {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int userId;
 
     @Column(unique = true)
@@ -29,7 +31,7 @@ public class Users {
     private boolean isActive;
 
     @DateTimeFormat(pattern = "dd-MM-yyyy")
-    private Date regiatrationDate;
+    private Date registrationDate;
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "userTypeId", referencedColumnName = "userTypeId")
