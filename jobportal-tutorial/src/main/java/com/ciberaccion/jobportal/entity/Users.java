@@ -1,14 +1,16 @@
 package com.ciberaccion.jobportal.entity;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.springframework.format.annotation.DateTimeFormat;
+import lombok.Data;
 
-import java.util.List;
+import java.util.Date;
 
 @Entity
-@Table(name = "users_type")
+@Table(name = "users")
 @Data
 @NoArgsConstructor
 @ToString
@@ -16,11 +18,20 @@ public class Users {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int userTypeId;
+    private int userId;
 
-    private String userTypeName;
+    @Column(unique = true)
+    private String email;
 
-    @ToString.Exclude
-    @OneToMany(targetEntity = Users.class, mappedBy = "userTypeId", cascade = CascadeType.ALL)
-    private List<Users> users;
+    @NotEmpty
+    private String password;
+
+    private boolean isActive;
+
+    @DateTimeFormat(pattern = "dd-MM-yyyy")
+    private Date regiatrationDate;
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "userTypeId", referencedColumnName = "userTypeId")
+    private UsersType userTypeId;
 }
