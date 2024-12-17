@@ -5,6 +5,7 @@ import com.ciberaccion.jobportal.entity.RecruiterProfile;
 import com.ciberaccion.jobportal.entity.Users;
 import com.ciberaccion.jobportal.repository.UsersRepository;
 import com.ciberaccion.jobportal.services.RecruiterProfileService;
+import com.ciberaccion.jobportal.utils.FileUploadUtil;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -12,6 +13,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
@@ -48,6 +50,7 @@ public class RecruiterProfileController {
         return "recruiter_profile";
     }
 
+    @PostMapping("/addNew")
     public String addnew(RecruiterProfile recruiterProfile, @RequestParam("image") MultipartFile multipartFile, Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (!(authentication instanceof AnonymousAuthenticationToken)) {
@@ -65,5 +68,13 @@ public class RecruiterProfileController {
         RecruiterProfile saveduser = recruiterProfileService.addNew(recruiterProfile);
 
         String uploadDir = "photos/recruiter/"+saveduser.getUserAccountId();
+        try{
+            FileUploadUtil.saveFile(uploadDir, fileName, multipartFile);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
+        return "redirect:/dashboard";
+
     }
 }
