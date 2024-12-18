@@ -13,6 +13,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -35,7 +36,7 @@ public class RecruiterProfileController {
         this.recruiterProfileService = recruiterProfileService;
     }
 
-
+    @GetMapping("/")
     public String recruiterProfile(Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (!(authentication instanceof AnonymousAuthenticationToken)) {
@@ -51,7 +52,7 @@ public class RecruiterProfileController {
     }
 
     @PostMapping("/addNew")
-    public String addnew(RecruiterProfile recruiterProfile, @RequestParam("image") MultipartFile multipartFile, Model model) {
+    public String addNew(RecruiterProfile recruiterProfile, @RequestParam("image") MultipartFile multipartFile, Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (!(authentication instanceof AnonymousAuthenticationToken)) {
             String currentUsername = authentication.getName();
@@ -64,6 +65,7 @@ public class RecruiterProfileController {
         String fileName = "";
         if (!multipartFile.getOriginalFilename().equals("")) {
             fileName = StringUtils.cleanPath(Objects.requireNonNull(multipartFile.getOriginalFilename()));
+            recruiterProfile.setProfilePhoto(fileName);
         }
         RecruiterProfile saveduser = recruiterProfileService.addNew(recruiterProfile);
 
@@ -74,7 +76,7 @@ public class RecruiterProfileController {
             ex.printStackTrace();
         }
 
-        return "redirect:/dashboard";
+        return "redirect:/dashboard/";
 
     }
 }
