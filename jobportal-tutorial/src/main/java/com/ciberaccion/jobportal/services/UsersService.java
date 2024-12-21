@@ -6,6 +6,7 @@ import com.ciberaccion.jobportal.entity.Users;
 import com.ciberaccion.jobportal.repository.JobSeekerProfileRepository;
 import com.ciberaccion.jobportal.repository.RecruiterProfileRepository;
 import com.ciberaccion.jobportal.repository.UsersRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -25,6 +26,7 @@ public class UsersService {
     private final RecruiterProfileRepository recruiterProfileRepository;
     private final PasswordEncoder passwordEncoder;
 
+    @Autowired
     public UsersService(UsersRepository usersRepository,
                         JobSeekerProfileRepository jobSeekerProfileRepository,
                         RecruiterProfileRepository recruiterProfileRepository,
@@ -85,5 +87,9 @@ public class UsersService {
             return user;
         }
         return null;
+    }
+
+    public Users findByEmail(String currentUsername) {
+        return usersRepository.findByEmail(currentUsername).orElseThrow(() -> new UsernameNotFoundException("user not found"));
     }
 }
