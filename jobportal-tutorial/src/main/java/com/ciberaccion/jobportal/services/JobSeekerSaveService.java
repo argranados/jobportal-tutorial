@@ -3,7 +3,6 @@ package com.ciberaccion.jobportal.services;
 import com.ciberaccion.jobportal.entity.JobPostActivity;
 import com.ciberaccion.jobportal.entity.JobSeekerProfile;
 import com.ciberaccion.jobportal.entity.JobSeekerSave;
-import com.ciberaccion.jobportal.repository.JobSeekerApplyRepository;
 import com.ciberaccion.jobportal.repository.JobSeekerSaveRepository;
 import org.springframework.stereotype.Service;
 
@@ -11,6 +10,7 @@ import java.util.List;
 
 @Service
 public class JobSeekerSaveService {
+
     private final JobSeekerSaveRepository jobSeekerSaveRepository;
 
     public JobSeekerSaveService(JobSeekerSaveRepository jobSeekerSaveRepository) {
@@ -23,5 +23,9 @@ public class JobSeekerSaveService {
 
     public List<JobSeekerSave> getJobCandidates(JobPostActivity job) {
         return jobSeekerSaveRepository.findByJob(job);
+    }
+
+    public void addNew(JobSeekerSave jobSeekerSave) {
+        jobSeekerSaveRepository.save(jobSeekerSave);
     }
 }
